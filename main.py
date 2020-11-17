@@ -2,19 +2,20 @@
 
 from NeuralNetwork import NeuralNetwork
 import itertools
+import numpy as np
 
 
-def train_on_all_boolean_functions(max_epochs=10000, learning_rate=0.01):
+def train_on_all_boolean_functions(max_epochs=10000, learning_rate=0.1):
     print()
 
     neural_network = NeuralNetwork()
 
     X_train = list(itertools.product([0, 1], repeat=2))
+    X_train = np.array(X_train)
     for y_train in itertools.product([0, 1], repeat=len(X_train)):
+        y_train = np.array([[y] for y in y_train])
         neural_network.fit(X_train, y_train, max_epochs, learning_rate)
         accuracy = neural_network.compute_accuracy(X_train, y_train)
-        if accuracy == 1.0:
-            continue
 
         print('Accuracy = {0}'.format(accuracy))
 
@@ -24,12 +25,15 @@ def train_on_all_boolean_functions(max_epochs=10000, learning_rate=0.01):
         print()
 
 
-def train_on_specific_function(y_train, max_epochs=10000, learning_rate=0.01):
+def train_on_specific_function(y_train, max_epochs=10000, learning_rate=0.1):
     print()
 
     neural_network = NeuralNetwork()
 
     X_train = list(itertools.product([0, 1], repeat=2))
+    X_train = np.array(X_train)
+
+    y_train = np.array(y_train)
 
     neural_network.fit(X_train, y_train, max_epochs, learning_rate)
 
@@ -51,7 +55,7 @@ if __name__ == '__main__':
         print('Enter the values of the desired function:')
 
         y_train = [
-            int(input('x1={0} x2={1} y='.format(i, j)))
+            [int(input('x1={0} x2={1} y='.format(i, j)))]
             for i in range(2)
             for j in range(2)
         ]
